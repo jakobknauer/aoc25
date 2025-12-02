@@ -1,6 +1,8 @@
 mod common;
 mod day01;
+mod day02;
 
 fn main() {
-    day01::day01();
+    day01::run();
+    day02::run();
 }

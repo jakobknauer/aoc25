@@ -4,12 +4,13 @@ enum Direction {
     Left,
     Right,
 }
+
 struct Instruction {
     dir: Direction,
     distance: i32,
 }
 
-pub fn day01() {
+pub fn run() {
     let (_, part1, part2) = read_input(1)
         .lines()
         .map(|line| {

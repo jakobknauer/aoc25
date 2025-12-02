@@ -1,3 +1,7 @@
+pub fn read_input(day: u32) -> InputFile {
+    InputFile::new(day)
+}
+
 pub struct InputFile {
     contents: String,
 }
@@ -12,8 +16,8 @@ impl InputFile {
     pub fn lines(&self) -> std::str::Lines<'_> {
         self.contents.lines()
     }
-}
 
-pub fn read_input(day: u32) -> InputFile {
-    InputFile::new(day)
+    pub fn contents(&self) -> &str {
+        &self.contents
+    }
 }
