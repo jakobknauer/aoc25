@@ -1,3 +1,5 @@
+pub mod grid;
+
 pub fn read_input(day: u32) -> InputFile {
     InputFile::new(day)
 }
