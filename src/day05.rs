@@ -1,5 +1,3 @@
-use itertools::Itertools;
-
 use crate::common::read_input;
 
 pub fn run() -> (usize, u64) {
@@ -37,12 +35,13 @@ fn part2(intervals: &mut [(u64, u64)]) -> u64 {
 
     let mut total = 0;
 
-    while let Some((start, end)) = it.next() {
-        let end = it
-            .peeking_take_while(|&(s, _)| s <= end)
-            .map(|(_, e)| e)
-            .max()
-            .unwrap_or(end);
+    while let Some((start, mut end)) = it.next() {
+        while let Some((s, e)) = it.peek().cloned()
+            && s <= end
+        {
+            end = end.max(e);
+            it.next();
+        }
 
         total += end - start + 1;
     }
