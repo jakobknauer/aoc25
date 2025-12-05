@@ -1,6 +1,6 @@
 use crate::common::read_input;
 
-pub fn run() {
+pub fn run() -> (usize, usize) {
     let ranges: Vec<(usize, usize)> = read_input(2)
         .contents()
         .trim()
@@ -11,19 +11,19 @@ pub fn run() {
         })
         .collect();
 
-    let part1: usize = ranges
+    let part1 = ranges
         .iter()
         .flat_map(|&(a, b)| a..=b)
         .filter(|&id| !is_valid(id))
         .sum();
 
-    let part2: usize = ranges
+    let part2 = ranges
         .iter()
         .flat_map(|&(a, b)| a..=b)
         .filter(|&id| !is_valid_2(id))
         .sum();
 
-    println!("{part1} {part2}");
+    (part1, part2)
 }
 
 fn is_valid(id: usize) -> bool {

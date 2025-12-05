@@ -1,16 +1,6 @@
 use crate::common::read_input;
 
-enum Direction {
-    Left,
-    Right,
-}
-
-struct Instruction {
-    dir: Direction,
-    distance: i32,
-}
-
-pub fn run() {
+pub fn run() -> (i32, i32) {
     let (_, part1, part2) = read_input(1)
         .lines()
         .map(|line| {
@@ -47,5 +37,15 @@ pub fn run() {
             },
         );
 
-    println!("{part1} {part2}");
+    (part1, part2)
+}
+
+enum Direction {
+    Left,
+    Right,
+}
+
+struct Instruction {
+    dir: Direction,
+    distance: i32,
 }

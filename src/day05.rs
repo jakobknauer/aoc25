@@ -2,7 +2,7 @@ use itertools::Itertools;
 
 use crate::common::read_input;
 
-pub fn run() {
+pub fn run() -> (usize, u64) {
     let input = read_input(5);
 
     let mut lines = input.lines();
@@ -21,7 +21,7 @@ pub fn run() {
     let part1 = part1(&intervals, &ingredients);
     let part2 = part2(&mut intervals);
 
-    println!("{part1} {part2}");
+    (part1, part2)
 }
 
 fn part1(intervals: &[(u64, u64)], ingredients: &[u64]) -> usize {

@@ -1,15 +1,15 @@
 use crate::common::read_input;
 
-pub fn run() {
+pub fn run() -> (u64, u64) {
     let banks: Vec<Vec<u64>> = read_input(3)
         .lines()
         .map(|bank| bank.chars().map(|c| c as u64 - '0' as u64).collect())
         .collect();
 
-    let part1: u64 = banks.iter().map(|bank| joltage(bank, 2)).sum();
-    let part2: u64 = banks.iter().map(|bank| joltage(bank, 12)).sum();
+    let part1 = banks.iter().map(|bank| joltage(bank, 2)).sum();
+    let part2 = banks.iter().map(|bank| joltage(bank, 12)).sum();
 
-    println!("{part1} {part2}");
+    (part1, part2)
 }
 
 fn joltage(mut bank: &[u64], n: usize) -> u64 {

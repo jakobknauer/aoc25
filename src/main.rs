@@ -5,10 +5,17 @@ mod day03;
 mod day04;
 mod day05;
 
+macro_rules! run_day {
+    ($day:ident) => {{
+        let (part1, part2) = $day::run();
+        println!("{}: {} {}", stringify!($day), part1, part2);
+    }};
+}
+
 fn main() {
-    day01::run();
-    day02::run();
-    day03::run();
-    day04::run();
-    day05::run();
+    run_day!(day01);
+    run_day!(day02);
+    run_day!(day03);
+    run_day!(day04);
+    run_day!(day05);
 }

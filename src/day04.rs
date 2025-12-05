@@ -3,7 +3,7 @@ use itertools::Itertools;
 use crate::common::grid::Grid;
 use crate::common::read_input;
 
-pub fn run() {
+pub fn run() -> (usize, usize) {
     let mut grid: Grid<bool> = read_input(4).lines().map(|line| line.chars().map(|c| c == '@')).into();
 
     let part1 = get_removable_paperrolls(&grid).into_iter().count();
@@ -21,7 +21,7 @@ pub fn run() {
         }
     }
 
-    println!("{part1} {part2}");
+    (part1, part2)
 }
 
 fn get_removable_paperrolls(grid: &Grid<bool>) -> impl IntoIterator<Item = (usize, usize)> {
