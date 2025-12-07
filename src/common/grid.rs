@@ -43,3 +43,11 @@ where
         }
     }
 }
+
+impl<T> std::ops::Index<(usize, usize)> for Grid<T> {
+    type Output = T;
+
+    fn index(&self, (row, col): (usize, usize)) -> &Self::Output {
+        self.get(row, col)
+    }
+}
