@@ -91,15 +91,18 @@ fn part2(lines: &[&str]) -> u64 {
     total
 }
 
+#[cfg(test)]
 mod test {
+    use super::*;
+
     #[test]
-    fn part2() {
+    fn test_part2() {
         let input = "123 328  51 64 
  45 64  387 23 
   6 98  215 314
 *   +   *   +  ";
 
-        let result = super::part2(&input.lines().collect::<Vec<_>>());
+        let result = part2(&input.lines().collect::<Vec<_>>());
         assert_eq!(result, 3263827);
     }
 }

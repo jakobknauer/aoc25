@@ -52,7 +52,7 @@ mod test {
 @.@.@@@.@.";
 
     #[test]
-    fn part1() {
+    fn test_part1() {
         let grid: Grid<bool> = SAMPLE.lines().map(|line| line.chars().map(|c| c == '@')).into();
         let part1 = get_removable_paperrolls(&grid).into_iter().count();
         assert_eq!(part1, 13);
