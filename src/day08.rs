@@ -117,7 +117,7 @@ mod test {
 
     #[test]
     fn test_part1() {
-        let boxes = [
+        let boxes: [[i64; 3]; 20] = [
             [162, 817, 812],
             [57, 618, 57],
             [906, 360, 560],
@@ -140,7 +140,14 @@ mod test {
             [425, 690, 689],
         ];
 
-        let actual = part1(&boxes, 10);
+        let num_boxes = boxes.len();
+        let mut pairs: Vec<_> = (0..num_boxes)
+            .cartesian_product(0..num_boxes)
+            .filter(|(a, b)| a < b)
+            .collect();
+        pairs.sort_by_key(|&(a, b)| boxes[a].iter().zip(boxes[b]).map(|(x, y)| (x - y).pow(2)).sum::<i64>());
+
+        let actual = part1(&pairs, num_boxes, 10);
         assert_eq!(actual, 40);
     }
 }
