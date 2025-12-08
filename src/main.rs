@@ -6,6 +6,7 @@ mod day04;
 mod day05;
 mod day06;
 mod day07;
+mod day08;
 
 macro_rules! run_day {
     ($day:ident) => {{
@@ -22,4 +23,5 @@ fn main() {
     run_day!(day05);
     run_day!(day06);
     run_day!(day07);
+    run_day!(day08);
 }
