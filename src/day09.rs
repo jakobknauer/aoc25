@@ -37,18 +37,34 @@ fn part2(red_tiles: &[(usize, usize)]) -> i64 {
         .flat_map(|a| (a + 1..num_tiles).map(move |b| (a, b)))
         .map(|(a, b)| (red_tiles[a], red_tiles[b]));
 
-    pairs
-        .filter(|&(c1, c2)| is_rectangle_contained(c1, c2, red_tiles))
-        .map(|((x1, y1), (x2, y2))| (x1 as i64 - x2 as i64).abs().add(1) * (y1 as i64 - y2 as i64).abs().add(1))
-        .max()
-        .unwrap()
+    let min_x = red_tiles.iter().map(|&(x, _)| x).min().unwrap();
+
+    let mut current_max = 0;
+    for (c1, c2) in pairs {
+        let (x1, y1) = c1;
+        let (x2, y2) = c2;
+        let area = (x1 as i64 - x2 as i64).abs().add(1) * (y1 as i64 - y2 as i64).abs().add(1);
+        if area <= current_max {
+            continue;
+        }
+
+        if is_rectangle_contained(c1, c2, red_tiles, min_x) {
+            current_max = area;
+        }
+    }
+    current_max
 }
 
-fn is_rectangle_contained((x1, y1): (usize, usize), (x2, y2): (usize, usize), vertices: &[(usize, usize)]) -> bool {
-    let rectangle_corners = [(x1, y1), (x1, y2), (x2, y1), (x2, y2)];
+fn is_rectangle_contained(
+    (x1, y1): (usize, usize),
+    (x2, y2): (usize, usize),
+    vertices: &[(usize, usize)],
+    min_x: usize,
+) -> bool {
+    let diagonal_points = [(x1, y2), (x2, y1)];
 
-    for &corner in &rectangle_corners {
-        if !is_point_contained(corner, vertices) {
+    for &corner in &diagonal_points {
+        if !is_point_contained(corner, vertices, min_x) {
             return false;
         }
     }
@@ -105,15 +121,9 @@ fn edges_intersect_improperly(
     }
 }
 
-fn is_point_contained(p: (usize, usize), vertices: &[(usize, usize)]) -> bool {
-    for (&p1, &p2) in vertices.iter().tuple_windows() {
-        if point_on_edge(p, p1, p2) {
-            return true;
-        }
-    }
-
-    let min_x = vertices.iter().map(|&(x, _)| x).min().unwrap();
+fn is_point_contained(p: (usize, usize), vertices: &[(usize, usize)], min_x: usize) -> bool {
     let mut intersections = 0;
+
     for (&p1, &p2) in vertices.iter().tuple_windows() {
         if edges_intersect_improperly(p, (min_x - 1, p.1), p1, p2) {
             intersections += 1;
@@ -121,14 +131,4 @@ fn is_point_contained(p: (usize, usize), vertices: &[(usize, usize)]) -> bool {
     }
 
     intersections % 2 == 1
-}
-
-fn point_on_edge((x, y): (usize, usize), (x1, y1): (usize, usize), (x2, y2): (usize, usize)) -> bool {
-    if x1 == x2 {
-        x == x1 && y >= y1.min(y2) && y <= y1.max(y2)
-    } else if y1 == y2 {
-        y == y1 && x >= x1.min(x2) && x <= x1.max(x2)
-    } else {
-        panic!("edge must be vertical or horizontal")
-    }
 }
