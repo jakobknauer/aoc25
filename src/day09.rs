@@ -37,8 +37,6 @@ fn part2(red_tiles: &[(usize, usize)]) -> i64 {
         .flat_map(|a| (a + 1..num_tiles).map(move |b| (a, b)))
         .map(|(a, b)| (red_tiles[a], red_tiles[b]));
 
-    let min_x = red_tiles.iter().map(|&(x, _)| x).min().unwrap();
-
     let mut current_max = 0;
     for (c1, c2) in pairs {
         let (x1, y1) = c1;
@@ -48,23 +46,22 @@ fn part2(red_tiles: &[(usize, usize)]) -> i64 {
             continue;
         }
 
-        if is_rectangle_contained(c1, c2, red_tiles, min_x) {
+        if is_rectangle_contained(c1, c2, red_tiles) {
             current_max = area;
         }
     }
     current_max
 }
 
-fn is_rectangle_contained(
-    (x1, y1): (usize, usize),
-    (x2, y2): (usize, usize),
-    vertices: &[(usize, usize)],
-    min_x: usize,
-) -> bool {
-    let diagonal_points = [(x1, y2), (x2, y1)];
+fn is_rectangle_contained((x1, y1): (usize, usize), (x2, y2): (usize, usize), vertices: &[(usize, usize)]) -> bool {
+    // The rectangle is contained if all four points are contained; and none of it's edges intersect
+    // an edge of the polygon orthogonally, except exactly at the end (thus we use the
+    // edges_intersect_properly function here).
 
+    // We must only check the two other points
+    let diagonal_points = [(x1, y2), (x2, y1)];
     for &corner in &diagonal_points {
-        if !is_point_contained(corner, vertices, min_x) {
+        if !is_point_contained(corner, vertices) {
             return false;
         }
     }
@@ -104,6 +101,17 @@ fn edges_intersect_properly(
     }
 }
 
+fn is_point_contained(p: (usize, usize), vertices: &[(usize, usize)]) -> bool {
+    let mut intersections = 0;
+
+    for (&p1, &p2) in vertices.iter().tuple_windows() {
+        if edges_intersect_improperly(p, (0, p.1), p1, p2) {
+            intersections += 1;
+        }
+    }
+
+    intersections % 2 == 1
+}
 fn edges_intersect_improperly(
     (x1, y1): (usize, usize),
     (x2, y2): (usize, usize),
@@ -119,16 +127,4 @@ fn edges_intersect_improperly(
     } else {
         false
     }
-}
-
-fn is_point_contained(p: (usize, usize), vertices: &[(usize, usize)], min_x: usize) -> bool {
-    let mut intersections = 0;
-
-    for (&p1, &p2) in vertices.iter().tuple_windows() {
-        if edges_intersect_improperly(p, (min_x - 1, p.1), p1, p2) {
-            intersections += 1;
-        }
-    }
-
-    intersections % 2 == 1
 }
